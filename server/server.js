@@ -65,9 +65,20 @@ app.get("/generate", async(req,res) => {
     try{
         const docSnap = await getDoc(docRef);
         if(docSnap.exists()) {
-            profile = docSnap.data();
+            resumeJson = docSnap.data();
             promptString = formatGptInput(resumeJson);
             gptRawResponse = getGptResponse(promptString);
+            gptExperiencesJson = JSON.parse(gptRawResponse);
+            // Match new bullets based on company
+            resumeJson.experience.forEach(e => {
+                company = e.company_name;
+                gptExperiencesJson.forEach(comp => {
+                    if (company == comp) {
+                        e.description_bullets = gptExperiences.comp;
+                    }
+                });
+            });
+
             // make API call to chatGPT with data as input
 
             // rawResume = response received from chatGPT

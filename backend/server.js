@@ -68,6 +68,7 @@ app.get("/generate", async(req,res) => {
             resumeJson = docSnap.data();
             promptString = formatGptInput(resumeJson);
             gptRawResponse = getGptResponse(promptString);
+            gptExperiencesJson = gptExperiencesJson.substring(7, gptExperiencesJson.len - 3);
             gptExperiencesJson = JSON.parse(gptRawResponse);
             // Match new bullets based on company
             resumeJson.experience.forEach(e => {
@@ -125,7 +126,7 @@ async function getGptResponse(promptString) {
     const chatCompletion = await openai.chat.completions.create({
         messages: [
             {role: 'system', content: 'You are a helpful assistant'},
-            {role: 'assistant', content: 'say the word yes'}
+            {role: 'assistant', content: promptString}
         ],
         model: 'gpt-4-1106-preview',
       });

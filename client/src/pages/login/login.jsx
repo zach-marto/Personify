@@ -10,8 +10,8 @@ function Login() {
   const handleGoogleSignIn = async () => {
     try {
       const res = await signInWithPopup(auth, googleProvider);
-      cookieHandler.set('testCookie', 'testValue', { path: '/' });
-    } 
+      cookieHandler.set('uid', res.user.uid, { path: '/' });
+    }
     catch (error) {
       console.error(error.message);
     }

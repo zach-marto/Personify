@@ -4,20 +4,17 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import GenerateResume from './pages/generateResume/generateResume.jsx';
 import Cookies from 'universal-cookie';
 
-
-
 function App() {
 
   const cookieHandler = new Cookies();
-
-  const uid = cookieHandler.get('uid')
+  const uid = cookieHandler.get('uid');
 
   return (
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={<Login />} />
-          <Route path="/generateResume" element={<GenerateResume />} />
+          <Route path="/" element={uid ? <Navigate to="/generateResume" /> : <Login />} />
+          <Route path="/generateResume" element={uid ? <GenerateResume /> : <Navigate to="/" />} />
         </Routes>
       </Router>
     </div>

@@ -1,0 +1,42 @@
+{
+    "contact": {
+      "name": {},
+      "phone": {},
+      "email": {},
+      "linkedin": {},
+      "github": {}
+    },
+    "education": {
+      "school_name": {},
+      "major": {},
+      "school_location": {},
+      "graduation_date": {}
+    },
+    "experience": {
+      "position_name": {},
+      "company_name": {},
+      "start_date": {},
+      "end_date": {},
+      "company_location": {},
+      "description_bullets": {},
+      "description_paragraph": {}
+    },
+    "projects": {
+      "name": {},
+      "start_date": {},
+      "end_date": {},
+      "languages_and_frameworks": {},
+      "description_bullets": {},
+      "description_paragraph": {}
+    },
+    "skills": {
+      "languages": {},
+      "frameworks": {},
+      "tools": {},
+      "libraries": {}
+    },
+    "obj_info": {
+      "user_id": {},
+      "date": {}
+    }
+}

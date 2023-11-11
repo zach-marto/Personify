@@ -16,11 +16,13 @@ app.use(express.json());
 
 app.post("/saveProfile", async(req,res) => {
     const data = req.body;
+    const uid = data.uid;
     try{
-        const docRef = await addDoc(collection(firebaseConfig.db, "users"), data);
-        // setDoc(docRef, { id: docRef.id }, { merge: true });
-        console.log("Document written with ID: ", docRef.id);
-        return res.status(200).json({ message: "Profile created successfully", id: docRef.id });
+        // const docRef = await addDoc(collection(firebaseConfig.db, "users", uid), data);
+        await setDoc(doc(firebaseConfig.db, "users", uid), data);
+        // await firebaseConfig.db.collection("users").doc(uid).set(data)
+        console.log("Document written with ID: ", uid);
+        return res.status(200).json({ message: "Profile created successfully", id: uid });
     } catch (error) {
         console.log(error);
         return res.status(400).json({message: "Error creating profile"});
@@ -31,7 +33,7 @@ app.post("/saveProfile", async(req,res) => {
 app.get("/getProfile", async(req,res) => {
     //make request to firebase storage
     const data = req.body;
-    const uid = req.body.uid;
+    const uid = data.uid;
 
     const docRef = doc(firebaseConfig.db, "users", uid)
     try{

@@ -1,16 +1,19 @@
-import firebase from 'firebase/app';
-import 'firebase/auth';
+import { initializeApp } from 'firebase/app';
+import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 
 const firebaseConfig = {
-  apiKey: 'YOUR_API_KEY',
-  authDomain: 'YOUR_AUTH_DOMAIN',
-  projectId: 'YOUR_PROJECT_ID',
-  storageBucket: 'YOUR_STORAGE_BUCKET',
-  messagingSenderId: 'YOUR_MESSAGING_SENDER_ID',
-  appId: 'YOUR_APP_ID',
+  apiKey: 'AIzaSyBQSHoRVe_bQzi9K-bRvlhqkL1uv9fCNrM',
+  authDomain: 'personify-d333c.firebaseapp.com',
+  projectId: 'personify-d333c',
+  storageBucket: 'personify-d333c.appspot.com',
+  messagingSenderId: '1022665084418',
+  appId: '1:1022665084418:web:8186ebac2c43c91a26611b',
 };
 
-firebase.initializeApp(firebaseConfig);
+const firebaseApp = initializeApp(firebaseConfig);
 
-export const auth = firebase.auth();
-export const googleProvider = new firebase.auth.GoogleAuthProvider();
+const auth = getAuth(firebaseApp);
+
+const googleProvider = new GoogleAuthProvider();
+
+export { auth, googleProvider };

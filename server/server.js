@@ -1,5 +1,5 @@
 import express from 'express';
-import {firebaseApp, db, storage, auth} from 'firebaseConfig.js';
+import firebaseConfig from './firebaseConfig.js';
 import { collection } from "firebase/firestore/lite";
 import { getDocs } from "firebase/firestore/lite";
 import { getDoc } from 'firebase/firestore/lite';
@@ -17,8 +17,10 @@ app.use(express.json());
 app.post("/saveProfile", async(req,res) => {
     const data = req.body;
     try{
-        const docRef = await addDoc(collection(db, "users"), data);
-        setDoc(docRef, { id: docRef.id }, { merge: true });
+        const docRef = await addDoc(collection(firebaseConfig.db, "users"), data);
+        // setDoc(docRef, { id: docRef.id }, { merge: true });
+        console.log("Document written with ID: ", docRef.id);
+        return res.status(200).json({ message: "Profile created successfully", id: docRef.id });
     } catch (error) {
         console.log(error);
         return res.status(400).json({message: "Error creating profile"});
@@ -29,9 +31,9 @@ app.post("/saveProfile", async(req,res) => {
 app.get("/getProfile", async(req,res) => {
     //make request to firebase storage
     const data = req.body;
-    const token = req.body.token;
+    const uid = req.body.uid;
 
-    const docRef = doc(db, "users", token)
+    const docRef = doc(firebaseConfig.db, "users", uid)
     try{
         const docSnap = await getDoc(docRef);
         if(docSnap.exists()) {
@@ -46,16 +48,14 @@ app.get("/getProfile", async(req,res) => {
         return res.status(400).json({message: 'could not find sections'});
     }
 
-    //res.send(res from firebase)
-
 });
 
 
 app.get("/generate", async(req,res) => {
     const data = req.body;
-    const token = req.body.token;
+    const uid = req.body.uid;
     // make request to firebase
-    const docRef = doc(db, "users", token) // docRef for userId as token
+    const docRef = doc(firebaseConfig.db, "users", uid) // docRef for userId as token
     let profile;
 
     // data = profile retrieved from firebase (identify user by token)

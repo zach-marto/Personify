@@ -8,6 +8,7 @@ import { updateDoc } from 'firebase/firestore/lite';
 import { addDoc } from 'firebase/firestore/lite';
 import { setDoc } from 'firebase/firestore/lite';
 import { deleteDoc } from 'firebase/firestore/lite';
+import OpenAI from 'openai';
 
 
 const app = express();
@@ -65,6 +66,8 @@ app.get("/generate", async(req,res) => {
         const docSnap = await getDoc(docRef);
         if(docSnap.exists()) {
             profile = docSnap.data();
+            promptString = formatGptInput(resumeJson);
+            gptRawResponse = getGptResponse(promptString);
             // make API call to chatGPT with data as input
 
             // rawResume = response received from chatGPT
@@ -87,6 +90,34 @@ app.get("/generate", async(req,res) => {
 
 });
 
+function formatGptInput(resumeJson) {
+    // Take json and put into
+    let innerString = ''
+    resumeJson.experience.forEach(e => {
+        company = e.company_name;
+        position = e.position_name;
+        eBullets = e.description_bullets;
+        eParagraph = e.description_paragraph;
+        innerString += `Company: ${company}\nPosition: ${position}\n${eBullets}\n${eParagraph}\n`;
+    });
+    let promptString = `User's experience input:\n${innerString}\nOutput required: Analyze the user's experience, identifying and highlighting skills and achievements that match the requirements and preferences stated in the job description. Mention specific technologies but don’t explicitly say that the user demonstrated or reflects anything and don’t say reuse non technical words from the job description
+    Generate about 4 resume bullet points for each experience, each section should begin with [placeholder] where placeholder is the company name
+    Generate a resume-like output with one section: 
+    Experience Section: A bulleted list summarizing the user's experience, emphasizing aspects most relevant to the job description.
+    Note: Please provide specific examples or context where necessary to ensure accuracy in skill matching and resume customization. Do not output anything except the experience section`;
+    return promptString;
+}
+
+async function getGptResponse(promptString) {
+    const chatCompletion = await openai.chat.completions.create({
+        messages: [
+            {role: 'system', content: 'You are a helpful assistant'},
+            {role: 'assistant', content: 'say the word yes'}
+        ],
+        model: 'gpt-4-1106-preview',
+      });
+    return chatCompletion.choices[0].message.content;
+}
 
 app.listen(3000, ()=>{
     console.log('Server started on port 3000');

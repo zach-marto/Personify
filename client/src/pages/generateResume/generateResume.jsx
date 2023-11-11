@@ -2,11 +2,10 @@ import React from 'react';
 import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
+import uid from '../../cookieHandler';
 
 function GenerateResume() {
 
-    const cookieHandler = new Cookies();
-    const uid = cookieHandler.get('uid');
     const [jobDescription, setJobDescription] = useState("");
 
     const generateNewResume = () => {

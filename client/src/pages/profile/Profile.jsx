@@ -2,14 +2,46 @@ import React from 'react'
 import Topbar from '../../components/topbar'
 import { useNavigate } from 'react-router-dom';
 import Button from '@mui/material/Button';
+import axios from 'axios';
+import uid  from '../../cookieHandler';
+import { useState, useEffect } from 'react';
+
 
 
 export default function Profile() {
     const navigate = useNavigate();
+    const [profileData, setProfileData] = useState(null); // State to store profile data
 
     const handleEdit = () => {
         navigate('/editprofile');
     }
+
+
+
+    useEffect(() => {
+        // Fetch profile data when the component mounts
+        axios.get(`http://localhost:3001/getProfile?`,
+        {
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({uid: uid}),
+            method: 'GET',
+            
+          }
+        )
+          .then((response) => {
+            console.log('uid', uid);
+            console.log(response.data);
+            setProfileData(response.data);
+          })
+          .catch((error) => {
+            console.error(error.message);
+          });
+      }, [uid]);
+      
+      
+      
 
   return (
       <div >
@@ -19,7 +51,7 @@ export default function Profile() {
         <h2>Contact Information</h2>
         <ul style={{ listStyleType: "none", justifyContent:"stretch" }}>
             <li><strong>Name:</strong> </li>
-            <li><strong>Phone:</strong> </li>
+            <li><strong>Phone:</strong>  </li>
             <li><strong>Email:</strong> </li>
             <li><strong>LinkedIn:</strong> </li>
             <li><strong>GitHub:</strong> </li>

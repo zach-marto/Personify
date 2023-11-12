@@ -4,6 +4,7 @@ import { auth, googleProvider } from '../../firebase';
 import Cookies from 'universal-cookie';
 import { useNavigate } from "react-router-dom";
 import './login.css';
+import Topbar from '../../components/topbar';
 
 function Login() {
 
@@ -24,6 +25,7 @@ function Login() {
 
   return (
     <div>
+      <Topbar />
       <h2>Login with Google</h2>
       <button class='login-with-google-btn' onClick={handleGoogleSignIn}>Sign in with Google</button>
     </div>

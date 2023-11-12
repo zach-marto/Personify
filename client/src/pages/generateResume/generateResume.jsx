@@ -26,12 +26,15 @@ function GenerateResume() {
     }
      
     return (
+      <div>
+        <Topbar />
         <div class='generateResumeForm'>
             <Button variant="contained" color="success" onClick={generateNewResume}>Generate Resume</Button>
             <div>
               <textarea class='jobDesc' type="text" placeholder="Enter job description" onChange={(e) => setJobDescription(e.target.value)} />
             </div>
         </div>
+      </div>
     );
 }
 

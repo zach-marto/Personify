@@ -26,8 +26,11 @@ function Login() {
   return (
     <div>
       <Topbar />
-      <h2>Login with Google</h2>
-      <button class='login-with-google-btn' onClick={handleGoogleSignIn}>Sign in with Google</button>
+      <div className="loginDiv">
+        <h1>Welcome to Personify!</h1>
+        <p>Sign in with your Google account to get started.</p>
+        <button class='login-with-google-btn' onClick={handleGoogleSignIn}>Sign in with Google</button>
+      </div>
     </div>
   );
 };

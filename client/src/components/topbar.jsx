@@ -17,11 +17,11 @@ function Topbar() {
 
   return (
     <div className="topbar" style={{display:"flex",  justifyContent:"stretch"}}>
-      <div className='topbar-left'>
-        <h1 onClick={navigateToGenerateResume}>Personify</h1>
-      </div>
+     <div className='topbar-left'>
+      <h1 onClick={navigateToGenerateResume}>Personify</h1>
+     </div>
      <div className='topbar-right'>
-     <Button variant="contained" onClick={navigateToGenerateResume}>Generate Resume</Button>
+      <Button variant="contained" onClick={navigateToGenerateResume}>Generate Resume</Button>
       <Button variant="contained" onClick={navigateToProfile}>My Profile</Button>
       </div>
     </div>

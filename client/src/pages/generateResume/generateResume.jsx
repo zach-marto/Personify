@@ -1,9 +1,13 @@
 import React from 'react';
 import { useState } from 'react';
-import Cookies from 'universal-cookie';
 import axios from 'axios';
 import uid from '../../cookieHandler';
+<<<<<<< HEAD
 import Topbar from '../../components/topbar';
+=======
+import './generateResume.css';
+import Button from '@mui/material/Button';
+>>>>>>> 8335906fb8880814b05e5955070da33c07dd6b6f
 
 function GenerateResume() {
 
@@ -25,10 +29,18 @@ function GenerateResume() {
     }
      
     return (
+<<<<<<< HEAD
         <div>
             <Topbar />
             <button onClick={generateNewResume}>Generate Resume</button>
             <textarea type="text" placeholder="Enter job description" onChange={(e) => setJobDescription(e.target.value)} />
+=======
+        <div class='generateResumeForm'>
+            <Button variant="contained" color="success" onClick={generateNewResume}>Generate Resume</Button>
+            <div>
+              <textarea class='jobDesc' type="text" placeholder="Enter job description" onChange={(e) => setJobDescription(e.target.value)} />
+            </div>
+>>>>>>> 8335906fb8880814b05e5955070da33c07dd6b6f
         </div>
     );
 }

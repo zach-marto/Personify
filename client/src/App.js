@@ -4,11 +4,9 @@ import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-d
 import GenerateResume from './pages/generateResume/generateResume.jsx';
 import Cookies from 'universal-cookie';
 import EditProfile from './pages/profile/EditProfile.jsx';
+import uid from './cookieHandler.js';
 
 function App() {
-
-  const cookieHandler = new Cookies();
-  const uid = cookieHandler.get('uid');
 
   return (
     <div className="App">

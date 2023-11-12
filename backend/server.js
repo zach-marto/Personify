@@ -9,6 +9,8 @@ import { addDoc } from 'firebase/firestore/lite';
 import { setDoc } from 'firebase/firestore/lite';
 import { deleteDoc } from 'firebase/firestore/lite';
 import OpenAI from 'openai';
+import { fillTemplateMain } from './latex/fill_template.js';
+import { compileResumeMain } from './latex/compile_resume.js';
 
 
 const app = express();
@@ -91,8 +93,12 @@ app.get("/generate", async(req,res) => {
             // rawResume = response received from chatGPT
 
             // convert rawResume to pdf & txt
+            fillTemplateMain(rawResume);
+            compileResumeMain();
 
             // store pdf & txt to firebase storage
+                //pdf path: latex/resumes/template1_filled/template1_filled.pdf
+                //tex path: latex/resumes/template1_filled/template1_filled.tex
 
             // get storage url and set to users/uid/resumeURLs section
 

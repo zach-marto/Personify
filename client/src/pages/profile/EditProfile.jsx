@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import uid from '../../cookieHandler';
+import axios from 'axios';
 
 function EditProfile() {
     const [contactInfo, setContactInfo] = useState({
@@ -24,6 +25,7 @@ function EditProfile() {
       end_date: '',
       company_location: '',
       description_paragraph: '',
+      description_bullets: '',
     }
     const skillsForm = {
       "languages": '',
@@ -88,14 +90,31 @@ function EditProfile() {
 
     //handle submit form data
     const handleSubmit = () => {  
-      const data = {
-        contactInfo,
-        educationInfo,
-        experienceInfo,
-        uid: uid
-      }
-      console.log(data);
-    };
+      
+        const data = {
+          contactInfo,
+          educationInfo,
+          experienceInfo,
+          skillsInfo,
+          uid: uid
+        }
+        axios.post('/saveProfile', data, {
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data),
+          method: 'POST',
+          
+        }).then((res) => {
+          console.log(res.data);
+        }
+        ).catch((err) => {
+          console.log(err);
+        })
+
+        console.log(data);
+      };
+
 
 
   
@@ -106,7 +125,6 @@ function EditProfile() {
       <h2>Personal Information</h2>
       <form>
         <div>
-          {contactInfo.name && (
             <div>
               <label>Name:</label>
               <input
@@ -114,10 +132,8 @@ function EditProfile() {
                 name="name"
                 value={contactInfo.name}
                 onChange={handleContactChange}
-                required
               />
             </div>
-          )}
         </div>
         <div>
           <label>Phone:</label>
@@ -126,7 +142,6 @@ function EditProfile() {
             name="phone"
             value={contactInfo.phone}
             onChange={handleContactChange}
-            required
           />
         </div>
         <div>
@@ -234,6 +249,7 @@ function EditProfile() {
           type="text"
           name="company_name"
           value={experience.company_name}
+          onChange={(e) => handleExperienceChange(e, index)}
         />
       </div>
       <div>
@@ -242,7 +258,7 @@ function EditProfile() {
           type="text"
           name="position_name"
           value={experience.position_name}
-          
+          onChange={(e) => handleExperienceChange(e, index)}
         />
       </div>
       <div>
@@ -251,7 +267,7 @@ function EditProfile() {
           type="text"
           name="start_date"
           value={experience.start_date}
-          
+          onChange={(e) => handleExperienceChange(e, index)}
         />
       </div>
       <div>
@@ -260,7 +276,7 @@ function EditProfile() {
           type="text"
           name="end_date"
           value={experience.end_date}
-          
+          onChange={(e) => handleExperienceChange(e, index)}
         />
       </div>
       <div>
@@ -269,7 +285,7 @@ function EditProfile() {
           type="text"
           name="company_location"
           value={experience.company_location}
-          
+          onChange={(e) => handleExperienceChange(e, index)}
         />
       </div>
       <div>
@@ -278,7 +294,7 @@ function EditProfile() {
           type="text"
           name="description_paragraph"
           value={experience.description_paragraph}
-          
+          onChange={(e) => handleExperienceChange(e, index)}
         />
       </div>
 

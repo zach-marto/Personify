@@ -1,6 +1,3 @@
-
-
-
 .topbar {
     display: flex;
     flex-direction: row;
@@ -12,10 +9,20 @@
 }
 
 .topbar-left {
-    
-    margin-right: auto;
+    display: flex;
+    margin-left: 20px;
+    align-items: center;
+}
+
+.topbar-left:hover {
+    cursor: pointer;
 }
 
 .topbar-right {
     margin-left: auto;
+}
+
+.topbar-right Button {
+    max-height: 30px;
+    margin-right: 20px;
 }

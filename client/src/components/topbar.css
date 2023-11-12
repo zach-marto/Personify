@@ -1,0 +1,28 @@
+.topbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: purple;
+    width: 100%;
+    color: white;
+}
+
+.topbar-left {
+    display: flex;
+    margin-left: 20px;
+    align-items: center;
+}
+
+.topbar-left:hover {
+    cursor: pointer;
+}
+
+.topbar-right {
+    margin-left: auto;
+}
+
+.topbar-right Button {
+    max-height: 30px;
+    margin-right: 20px;
+}

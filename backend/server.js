@@ -68,7 +68,7 @@ app.get("/generate", async(req,res) => {
             resumeJson = docSnap.data();
             promptString = formatGptInput(resumeJson);
             gptRawResponse = getGptResponse(promptString);
-            gptExperiencesJson = gptExperiencesJson.substring(7, gptExperiencesJson.len - 3);
+            gptRawResponse = gptRawResponse.substring(7, gptRawResponse.len - 3);
             gptExperiencesJson = JSON.parse(gptRawResponse);
             // Match new bullets based on company
             resumeJson.experience.forEach(e => {
@@ -79,6 +79,10 @@ app.get("/generate", async(req,res) => {
                     }
                 });
             });
+
+            projectsPromptString(formatGptInputProjects(resumeJson));
+            gptRawProjectsResp = getGptResponse(projectsPromptString);
+            gptRawProjectResp = gptRawProjectResp.substring(7, gptRawProjectResp.len - 3);
 
             console.log(resumeJson);
 
@@ -132,6 +136,19 @@ async function getGptResponse(promptString) {
       });
     return chatCompletion.choices[0].message.content;
 }
+
+function formatGptInputProjects(resumeJson) {
+    let innerString = '';
+    resumeJson.experience.forEach(p => {
+        pname = p.name;
+        bullets = p.description_bullets;
+        paragraph = p.description_paragraph;
+        innerString += `Project name: ${pname} Project description: ${bullets} ${paragraph}`;
+    });
+    let promptString = `User's project inputs: ${innerString} Output required: Analyze the user's projects, identifying and highlighting skills and achievements that match the requirements and preferences stated in the job description. Mention specific technologies but don’t explicitly say that the user demonstrated or reflects anything and don’t say reuse non technical words from the job description. Generate up to 3 resume bullet points for each project, each section should begin with [placeholder] where placeholder is the project name. Pick the two most relevant projects. Generate a resume-like output in json format with each project as a key and a bulleted list summarizing the user's experience, emphasizing aspects most relevant to the job description. Please provide specific examples or context where necessary to ensure accuracy in skill matching and resume customization. Do not output anything except the project section. `;
+    return promptString;
+}
+
 
 app.listen(3000, ()=>{
     console.log('Server started on port 3000');

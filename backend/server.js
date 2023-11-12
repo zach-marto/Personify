@@ -77,21 +77,29 @@ app.get("/generate", async(req,res) => {
             let promptString = formatGptInput(resumeJson);
             let gptRawResponse = await getGptResponse(promptString);
             // console.log(gptRawResponse.substring(0,8));
-            let gptTrimmed = gptRawResponse.substring(7,gptRawResponse.len-3);
-            gptTrimmed = gptTrimmed.replace(/\n/g, '');
+            // let gptTrimmed = gptRawResponse.replace(/'```json\n|\n```'|\\n/g, '');
+            let gptTrimmed = gptRawResponse.replace(/\n/g, '');
+            console.log(gptTrimmed);
+            gptTrimmed = JSON.parse(gptTrimmed);
             console.log(gptTrimmed);
             // let gptExperiencesJson = {c: gptRawResponse};
             // console.log(gptExperiencesJson)
             
             // Match new bullets based on company
-            // resumeJson.experienceInfo.forEach(e => {
-            //     let company = e.company_name;
-            //     gptExperiencesJson.forEach(comp => {
-            //         if (company == comp) {
-            //             e.description_bullets = gptExperiencesJson.comp;
-            //         }
-            //     });
-            // });
+            resumeJson.experienceInfo.forEach(e => {
+                let company = e.company_name;
+                for (var comp in gptTrimmed) {
+                    if (company == comp) {
+                        e.description_bullets = gptTrimmed.comp;
+                    }
+                }
+                // gptTrimmed.forEach(comp => {
+                //     if (company == comp) {
+                //         e.description_bullets = gptTrimmed.comp;
+                //     }
+                // });
+            });
+            console.log(resumeJson)
 
             resumeJson.experienceInfo.description_bullets = gptTrimmed;
             //==================
@@ -164,7 +172,7 @@ function formatGptInput(resumeJson) {
         innerString += `Company: ${company}\nPosition: ${position}\n${eBullets}\n${eParagraph}\n`;
     });
     let promptString = `User's experience input:\n${innerString}\nOutput Required:
-    Analyze the user's experience, identifying and highlighting skills and achievements that match the requirements and preferences stated in the job description. Mention specific technologies but don’t explicitly say that the user demonstrated or reflects anything and don’t say reuse non technical words from the job description. Generate about 4 resume bullet points for each experience, each section should begin with [placeholder] where placeholder is the company name. Use fewer bullet points for less relevant experiences and more bullet points for more relevant experiences. Generate a resume-like output in json format with each company as a key and a bulleted list summarizing the user's experience, emphasizing aspects most relevant to the job description. Please provide specific examples or context where necessary to ensure accuracy in skill matching and resume customization. Do not output anything except the experience section. 
+    Analyze the user's experience, identifying and highlighting skills and achievements that match the requirements and preferences stated in the job description. Mention specific technologies but don’t explicitly say that the user demonstrated or reflects anything and don’t say reuse non technical words from the job description. Generate about 4 resume bullet points for each experience, each section should begin with [placeholder] where placeholder is the company name. Use fewer bullet points for less relevant experiences and more bullet points for more relevant experiences. Generate a resume-like output in json format with each company as a key and a bulleted list summarizing the user's experience, emphasizing aspects most relevant to the job description. Please provide specific examples or context where necessary to ensure accuracy in skill matching and resume customization. Do not output anything except the experience section. Give the raw string without json backticks or newlines 
     `;
     return promptString;
 }

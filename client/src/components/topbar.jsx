@@ -3,12 +3,13 @@ import Button from '@mui/material/Button';
 import './topbar.css';
 import { useNavigate } from "react-router-dom";
 
+
 function Topbar() {
 
   const navigate = useNavigate();
 
   const navigateToProfile = () => {
-    navigate('/editProfile');
+    navigate('/profile');
   }
 
   const navigateToGenerateResume = () => {

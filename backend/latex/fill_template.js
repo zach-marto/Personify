@@ -1,6 +1,6 @@
-import exp from 'constants';
 import fs from 'fs';
 import replace from 'replace-in-file'
+import { trimResume } from './trim.js';
 
 function readJsonFile(file_path) {
     try {
@@ -195,18 +195,6 @@ function objHasProps(resume_object, property_list) {
     return JSON.stringify({}) != JSON.stringify(obj);
 }
 
-// function getReplacementString(resume_object, property_list, replacement_string) {
-//     let obj = resume_object;
-//     for (let i = 0; i < property_list.length; ++i) {
-//         const prop = property_list[i];
-//         if (!obj.hasOwnProperty(prop)) {
-//             return "";
-//         }
-//         obj = obj.prop;
-//     }
-//     return replacement_string;
-// }
-
 function createReplacements(resume_object) {
     const replacements = [];
     replacements.push(getReplacement("name", getName(resume_object)));
@@ -223,6 +211,7 @@ function createReplacements(resume_object) {
     replacements.push(getReplacement("projects", getProjects(resume_object)));
     return replacements
 }
+
 
 async function fill_template_main (jsonObject, template_name) {
     // const template_name = "template1";

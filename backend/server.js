@@ -11,6 +11,8 @@ import { setDoc } from 'firebase/firestore/lite';
 import { deleteDoc } from 'firebase/firestore/lite';
 import { ref, uploadBytes } from 'firebase/storage';
 import OpenAI from 'openai';
+import { fillTemplateMain } from './latex/fill_template.js';
+import { compileResumeMain } from './latex/compile_resume.js';
 
 import fill_template from './latex/fill_template.js';
 import compile_resume from './latex/compile_resume.js';
@@ -134,6 +136,7 @@ app.get("/generate", async(req,res) => {
             // rawResume = response received from chatGPT
 
             // convert rawResume to pdf & txt
+
             await fill_template.fill_template_main(JSON.stringify(resumeJson), uid);
             await compile_resume.compile_resume_main(uid);
 
@@ -149,6 +152,7 @@ app.get("/generate", async(req,res) => {
             uploadBytes(resumeRef, tex_file_path).then((snapshot) => {
                 console.log('Uploaded tex file!');
             });
+
 
             // get storage url and set to users/uid/resumeURLs section
 

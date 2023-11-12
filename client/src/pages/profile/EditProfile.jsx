@@ -102,7 +102,7 @@ function EditProfile() {
           skillsInfo,
           uid: uid
         }
-        axios.post('/saveProfile', data, {
+        axios.post('http://localhost:3001/saveProfile', data, {
           headers: {
             'Content-Type': 'application/json'
           },

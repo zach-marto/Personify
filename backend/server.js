@@ -1,4 +1,5 @@
 import express from 'express';
+import cors from 'cors';
 import firebaseConfig from './firebaseConfig.js';
 import { collection } from "firebase/firestore/lite";
 import { getDocs } from "firebase/firestore/lite";
@@ -21,6 +22,8 @@ dotenv.config();
 const app = express();
 
 app.use(express.json());
+app.use(cors({origin: '*'}));
+
 
 app.post("/saveProfile", async(req,res) => {
     const data = req.body;

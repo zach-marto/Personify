@@ -1,3 +1,11 @@
+.loginDiv {
+  margin-top: 10%;
+}
+
+.loginDiv h1 {
+  font-size: 40px;
+}
+
 /* Login with Google button from https://codepen.io/mupkoo/pen/YgddgB */
 .login-with-google-btn {
     transition: background-color .3s, box-shadow .3s;

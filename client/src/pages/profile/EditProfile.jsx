@@ -316,6 +316,7 @@ function EditProfile() {
             type="text"
             name="languages"
             value={skillsInfo.languages}
+            onChange={(e) => addSkills(e, index)}
           />
         </div>
         <div>
@@ -324,6 +325,7 @@ function EditProfile() {
             type="text"
             name="frameworks"
             value={skillsInfo.frameworks}
+            onChange={(e) => addSkills(e, index)}
           />
         </div>
         <div>
@@ -332,6 +334,7 @@ function EditProfile() {
             type="text"
             name="tools"
             value={skillsInfo.tools}
+            onChange={(e) => addSkills(e, index)}
           />
         </div>
         <div>
@@ -340,6 +343,7 @@ function EditProfile() {
             type="text"
             name="libraries"
             value={skillsInfo.libraries}
+            onChange={(e) => addSkills(e, index)}
           />
         </div>
   </form>

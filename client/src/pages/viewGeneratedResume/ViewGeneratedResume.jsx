@@ -6,7 +6,6 @@ import DownloadIcon from '@mui/icons-material/Download';
 
 function ViewGeneratedResume () {
 
-  //Still not working properly, seems like a cors issue
   const downloadPDF = async () => {
     try {
       const response = await fetch(pdfUrl);
@@ -26,11 +25,12 @@ function ViewGeneratedResume () {
   //Eventually will need to get the generated resume url from the backend, using test resume for now
   const pdfUrl = 'https://firebasestorage.googleapis.com/v0/b/personify-d333c.appspot.com/o/TestResume.pdf?alt=media&token=21685556-9090-40f1-8fe7-0e024f3141f3';
 
+  //Still need a button to go back to GenerateResume page
   return (
     <div>
       <Topbar />
-      <iframe class='pdfViewer' title="PDF Viewer" src={pdfUrl} width="50%" height="400px" />
-      <div class="buttons">
+      <iframe className='pdfViewer' title="PDF Viewer" src={pdfUrl} width="50%" height="400px" />
+      <div className="buttons">
         <Button variant="contained" startIcon={<DownloadIcon />} onClick={downloadPDF}>Download PDF</Button>
         <Button variant="contained" color="success" startIcon={<DownloadIcon />}>Download LaTeX</Button>
       </div>

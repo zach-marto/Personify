@@ -12,8 +12,8 @@ function App() {
     <div className="App">
       <Router>
         <Routes>
-          <Route path="/" element={uid ? <Navigate to="/generate" /> : <Login />} />
-          <Route path="/generate" element={uid ? <GenerateResume /> : <Navigate to="/" />} />
+          <Route path="/" element={uid ? <Navigate to="/generateResume" /> : <Login />} />
+          <Route path="/generateResume" element={uid ? <GenerateResume /> : <Navigate to="/" />} />
           <Route path="/editProfile" element={uid ? <EditProfile /> : <Navigate to="/" />} />
         </Routes>
       </Router>

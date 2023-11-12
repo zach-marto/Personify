@@ -90,6 +90,7 @@ app.get("/generate", async(req,res) => {
                     }
                 }
             });
+            
             // console.log(resumeJson.experienceInfo[0].description_bullets);
 
             // convert rawResume to pdf & txt

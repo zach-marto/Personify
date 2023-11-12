@@ -3,6 +3,7 @@ import { useState } from 'react';
 import Cookies from 'universal-cookie';
 import axios from 'axios';
 import uid from '../../cookieHandler';
+import Topbar from '../../components/topbar';
 
 function GenerateResume() {
 
@@ -25,6 +26,7 @@ function GenerateResume() {
      
     return (
         <div>
+            <Topbar />
             <button onClick={generateNewResume}>Generate Resume</button>
             <textarea type="text" placeholder="Enter job description" onChange={(e) => setJobDescription(e.target.value)} />
         </div>

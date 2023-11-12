@@ -8,7 +8,11 @@ import { updateDoc } from 'firebase/firestore/lite';
 import { addDoc } from 'firebase/firestore/lite';
 import { setDoc } from 'firebase/firestore/lite';
 import { deleteDoc } from 'firebase/firestore/lite';
+import { ref, uploadBytes } from 'firebase/storage';
 import OpenAI from 'openai';
+
+import fill_template from './latex/fill_template.js';
+import compile_resume from './latex/compile_resume.js';
 
 
 const app = express();
@@ -65,24 +69,48 @@ app.get("/generate", async(req,res) => {
     try{
         const docSnap = await getDoc(docRef);
         if(docSnap.exists()) {
-            resumeJson = docSnap.data();
-            promptString = formatGptInput(resumeJson);
-            gptRawResponse = getGptResponse(promptString);
-            gptRawResponse = gptRawResponse.substring(7, gptRawResponse.len - 3);
-            gptExperiencesJson = JSON.parse(gptRawResponse);
-            // Match new bullets based on company
-            resumeJson.experience.forEach(e => {
-                company = e.company_name;
-                gptExperiencesJson.forEach(comp => {
-                    if (company == comp) {
-                        e.description_bullets = gptExperiences.comp;
-                    }
-                });
-            });
+            let resumeJson = docSnap.data();
 
-            projectsPromptString(formatGptInputProjects(resumeJson));
-            gptRawProjectsResp = getGptResponse(projectsPromptString);
-            gptRawProjectResp = gptRawProjectResp.substring(7, gptRawProjectResp.len - 3);
+            let promptString = formatGptInput(resumeJson);
+            let gptRawResponse = await getGptResponse(promptString);
+            // console.log(gptRawResponse.substring(0,8));
+            // gptRawResponse = gptRawResponse.substring(7, gptRawResponse.len - 3);
+            console.log(gptRawResponse);
+            // let gptExperiencesJson = {c: gptRawResponse};
+            // console.log(gptExperiencesJson)
+            
+            // Match new bullets based on company
+            // resumeJson.experienceInfo.forEach(e => {
+            //     let company = e.company_name;
+            //     gptExperiencesJson.forEach(comp => {
+            //         if (company == comp) {
+            //             e.description_bullets = gptExperiencesJson.comp;
+            //         }
+            //     });
+            // });
+
+            resumeJson.experienceInfo.description_bullets = gptRawResponse;
+            //==================
+                // this is what we get from GPT response.
+
+                // Experience Section:
+
+                // [Google]
+                // - Spearheaded the design and implementation of scalable software solutions, ensuring the robustness and reliability of systems in a high-volume transaction environment.
+                // - Enhanced system efficiency by optimizing existing algorithms, resulting in a significant reduction in computational costs and improvement in runtime performance.
+                // - Collaborated effectively within a cross-functional team to integrate cutting-edge technologies, contributing to the continuous evolution and innovation of software products.
+                // - Instrumental in the deployment of machine learning models for predictive analytics, significantly increasing the accuracy of data-driven decision-making processes.
+
+                // Now we need to extract [Google] company name
+                // and each bulletpoints
+                // strip 'Expreience Secion:', '[]', etc
+
+                // then update resumeJson with matching company name
+            //==================
+
+            // projectsPromptString(formatGptInputProjects(resumeJson));
+            // gptRawProjectsResp = getGptResponse(projectsPromptString);
+            // gptRawProjectResp = gptRawProjectResp.substring(7, gptRawProjectResp.len - 3);
 
             console.log(resumeJson);
 
@@ -91,8 +119,21 @@ app.get("/generate", async(req,res) => {
             // rawResume = response received from chatGPT
 
             // convert rawResume to pdf & txt
+            await fill_template.fill_template_main(JSON.stringify(resumeJson), uid);
+            await compile_resume.compile_resume_main(uid);
 
-            // store pdf & txt to firebase storage
+            let pdf_file_path = `./resumes/${uid}.pdf`;
+            let tex_file_path = `./resumes/${uid}.tex`;
+
+            // store pdf & tex to firebase storage
+
+            const resumeRef = ref(firebaseConfig.storage, uid);
+            uploadBytes(resumeRef, pdf_file_path).then((snapshot) => {
+                console.log('Uploaded pdf file!');
+            });
+            uploadBytes(resumeRef, tex_file_path).then((snapshot) => {
+                console.log('Uploaded tex file!');
+            });
 
             // get storage url and set to users/uid/resumeURLs section
 
@@ -111,11 +152,11 @@ app.get("/generate", async(req,res) => {
 function formatGptInput(resumeJson) {
     // Take json and put into
     let innerString = ''
-    resumeJson.experience.forEach(e => {
-        company = e.company_name;
-        position = e.position_name;
-        eBullets = e.description_bullets;
-        eParagraph = e.description_paragraph;
+    resumeJson.experienceInfo.forEach(e => {
+        let company = e.company_name;
+        let position = e.position_name;
+        let eBullets = e.description_bullets;
+        let eParagraph = e.description_paragraph;
         innerString += `Company: ${company}\nPosition: ${position}\n${eBullets}\n${eParagraph}\n`;
     });
     let promptString = `User's experience input:\n${innerString}\nOutput required: Analyze the user's experience, identifying and highlighting skills and achievements that match the requirements and preferences stated in the job description. Mention specific technologies but don’t explicitly say that the user demonstrated or reflects anything and don’t say reuse non technical words from the job description
@@ -127,6 +168,7 @@ function formatGptInput(resumeJson) {
 }
 
 async function getGptResponse(promptString) {
+    const openai = new OpenAI({apiKey: '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'});
     const chatCompletion = await openai.chat.completions.create({
         messages: [
             {role: 'system', content: 'You are a helpful assistant'},
@@ -139,10 +181,10 @@ async function getGptResponse(promptString) {
 
 function formatGptInputProjects(resumeJson) {
     let innerString = '';
-    resumeJson.experience.forEach(p => {
-        pname = p.name;
-        bullets = p.description_bullets;
-        paragraph = p.description_paragraph;
+    resumeJson.experienceInfo.forEach(p => {
+        let pname = p.name;
+        let bullets = p.description_bullets;
+        let paragraph = p.description_paragraph;
         innerString += `Project name: ${pname} Project description: ${bullets} ${paragraph}`;
     });
     let promptString = `User's project inputs: ${innerString} Output required: Analyze the user's projects, identifying and highlighting skills and achievements that match the requirements and preferences stated in the job description. Mention specific technologies but don’t explicitly say that the user demonstrated or reflects anything and don’t say reuse non technical words from the job description. Generate up to 3 resume bullet points for each project, each section should begin with [placeholder] where placeholder is the project name. Pick the two most relevant projects. Generate a resume-like output in json format with each project as a key and a bulleted list summarizing the user's experience, emphasizing aspects most relevant to the job description. Please provide specific examples or context where necessary to ensure accuracy in skill matching and resume customization. Do not output anything except the project section. `;
@@ -150,6 +192,6 @@ function formatGptInputProjects(resumeJson) {
 }
 
 
-app.listen(3000, ()=>{
-    console.log('Server started on port 3000');
+app.listen(3001, ()=>{
+    console.log('Server started on port 3001');
 })

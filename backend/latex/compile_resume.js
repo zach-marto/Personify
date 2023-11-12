@@ -83,13 +83,13 @@ function moveFilesToOutput(template_name) {
     getTempFiles("./").forEach(file_name => moveFile(`./${file_name}`, `./resumes/${template_name}/tmp_files/${file_name}`));
 }
 
-async function main() {
+async function compile_resume_main(template_name) {
     // const template_folder_path = "./templates/";
     const template_folder_path = "./";
-    const template_name = "template1_filled";
+    // const template_name = "template1_filled";
     await compileLatex(template_folder_path + template_name + ".tex");
     setupOutputFolder(template_name);
     moveFilesToOutput(template_name);
 }
 
-main();
+export default {compile_resume_main};

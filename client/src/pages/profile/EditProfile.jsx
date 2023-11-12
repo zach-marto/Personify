@@ -4,6 +4,7 @@ import uid from '../../cookieHandler';
 import axios from 'axios';
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
+import Topbar from '../../components/topbar';
 
 function EditProfile() {
     const [contactInfo, setContactInfo] = useState({
@@ -123,6 +124,7 @@ function EditProfile() {
   
   return (
   <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1rem"}}>
+      <Topbar />
       <h1>Edit Profile</h1>
       <section>
       <h2>Personal Information</h2>

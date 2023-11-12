@@ -1,0 +1,21 @@
+
+
+
+.topbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+    background-color: purple;
+    width: 100%;
+    color: white;
+}
+
+.topbar-left {
+    
+    margin-right: auto;
+}
+
+.topbar-right {
+    margin-left: auto;
+}

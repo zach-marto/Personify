@@ -83,7 +83,7 @@ function moveFilesToOutput(template_name) {
     getTempFiles("./").forEach(file_name => moveFile(`./${file_name}`, `./resumes/${template_name}/tmp_files/${file_name}`));
 }
 
-async function main() {
+export async function compileResumeMain() {
     // const template_folder_path = "./templates/";
     const template_folder_path = "./";
     const template_name = "template1_filled";
@@ -92,4 +92,4 @@ async function main() {
     moveFilesToOutput(template_name);
 }
 
-main();
+// main();

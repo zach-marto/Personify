@@ -4,7 +4,7 @@ import { trimResume } from './trim.js';
 
 function readJsonFile(file_path) {
     try {
-      const jsonData = fs.readFileSync(file_path, 'utf8');
+      const jsonData = file_path;//fs.readFileSync(file_path, 'utf8');
       return JSON.parse(jsonData);
     } catch (error) {
       console.error(`Error reading JSON file: ${error.message}`);
@@ -212,12 +212,13 @@ function createReplacements(resume_object) {
     return replacements
 }
 
-export async function fillTemplateMain (resume_object) {
-    const template_name = "template1";
-    // const resume_object = trimResume(readJsonFile("resume.json"));
-    
+
+async function fill_template_main (jsonObject, template_name) {
+    // const template_name = "template1";
+    const resume_object = JSON.parse(jsonObject);//readJsonFile(jsonObject);
+
     //Create unfilled file which we will fill
-    await copyFile(`templates/${template_name}.tex`, `./${template_name}_filled.tex`);
+    await copyFile(`./latex/templates/template1.tex`, `./${template_name}_filled.tex`);
 
     //Parse our resume information into regex objects which we will use to fill resume
     const replacements = createReplacements(resume_object);
@@ -226,4 +227,4 @@ export async function fillTemplateMain (resume_object) {
     findAndReplace(`./${template_name}_filled.tex`, replacements);
 }
 
-// main();
+export default {fill_template_main};

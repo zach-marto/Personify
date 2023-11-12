@@ -29,6 +29,7 @@
   },
   "dependencies": {
     "express": "^4.18.2",
-    "firebase": "^10.6.0"
+    "firebase": "^10.6.0",
+    "replace-in-file": "^7.0.2"
   }
 }

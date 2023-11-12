@@ -13,6 +13,9 @@ import OpenAI from 'openai';
 
 import fill_template from './latex/fill_template.js';
 import compile_resume from './latex/compile_resume.js';
+import dotenv from 'dotenv';
+dotenv.config();
+
 
 
 const app = express();
@@ -74,8 +77,9 @@ app.get("/generate", async(req,res) => {
             let promptString = formatGptInput(resumeJson);
             let gptRawResponse = await getGptResponse(promptString);
             // console.log(gptRawResponse.substring(0,8));
-            // gptRawResponse = gptRawResponse.substring(7, gptRawResponse.len - 3);
-            console.log(gptRawResponse);
+            let gptTrimmed = gptRawResponse.substring(7,gptRawResponse.len-3);
+            gptTrimmed = gptTrimmed.replace(/\n/g, '');
+            console.log(gptTrimmed);
             // let gptExperiencesJson = {c: gptRawResponse};
             // console.log(gptExperiencesJson)
             
@@ -89,7 +93,7 @@ app.get("/generate", async(req,res) => {
             //     });
             // });
 
-            resumeJson.experienceInfo.description_bullets = gptRawResponse;
+            resumeJson.experienceInfo.description_bullets = gptTrimmed;
             //==================
                 // this is what we get from GPT response.
 
@@ -159,16 +163,14 @@ function formatGptInput(resumeJson) {
         let eParagraph = e.description_paragraph;
         innerString += `Company: ${company}\nPosition: ${position}\n${eBullets}\n${eParagraph}\n`;
     });
-    let promptString = `User's experience input:\n${innerString}\nOutput required: Analyze the user's experience, identifying and highlighting skills and achievements that match the requirements and preferences stated in the job description. Mention specific technologies but don’t explicitly say that the user demonstrated or reflects anything and don’t say reuse non technical words from the job description
-    Generate about 4 resume bullet points for each experience, each section should begin with [placeholder] where placeholder is the company name
-    Generate a resume-like output with one section: 
-    Experience Section: A bulleted list summarizing the user's experience, emphasizing aspects most relevant to the job description.
-    Note: Please provide specific examples or context where necessary to ensure accuracy in skill matching and resume customization. Do not output anything except the experience section`;
+    let promptString = `User's experience input:\n${innerString}\nOutput Required:
+    Analyze the user's experience, identifying and highlighting skills and achievements that match the requirements and preferences stated in the job description. Mention specific technologies but don’t explicitly say that the user demonstrated or reflects anything and don’t say reuse non technical words from the job description. Generate about 4 resume bullet points for each experience, each section should begin with [placeholder] where placeholder is the company name. Use fewer bullet points for less relevant experiences and more bullet points for more relevant experiences. Generate a resume-like output in json format with each company as a key and a bulleted list summarizing the user's experience, emphasizing aspects most relevant to the job description. Please provide specific examples or context where necessary to ensure accuracy in skill matching and resume customization. Do not output anything except the experience section. 
+    `;
     return promptString;
 }
 
 async function getGptResponse(promptString) {
-    const openai = new OpenAI({apiKey: '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'});
+    const openai = new OpenAI({apiKey: process.env.OPENAI_API_KEY});
     const chatCompletion = await openai.chat.completions.create({
         messages: [
             {role: 'system', content: 'You are a helpful assistant'},

@@ -1,0 +1,50 @@
+{
+    "contact": {
+      "name": "Walter White",
+      "phone": "123-456-7890",
+      "email": "bigchungus@gmail.com",
+      "linkedin": "https://www.linkedin.com/in/zach-marto-484743203/",
+      "github": "https://github.com/zachm7115"
+    },
+    "education": [
+        {
+            "school_name": "ZooMass",
+            "major": "B.Sc. in Computer Science",
+            "school_location": "Amherst, MA",
+            "graduation_date": "Dec 2024",
+            "GPA": "5.0",
+            "relevant_coursework": ["Data Structures", "Web Development", "Algorithms"]
+        }
+    ],
+    "experience": [
+        {
+            "position_name": "Big Papa",
+            "company_name": "Papa John's Pizza House",
+            "start_date": "Aug 2024",
+            "end_date": "June 2024",
+            "company_location": "Amherst, MA",
+            "description_bullets": ["Gave Little Papas training", "Made da pizzas", "Taste tested many many times"],
+            "description_paragraph": {}
+        }
+    ],
+    "projects": [
+        {
+            "name": "My BIG project",
+            "start_date": "June 2024",
+            "end_date": "Present",
+            "languages_and_frameworks": ["Python", "React", "JS"],
+            "description_bullets": ["I did a BIG project in the toilet", "Used Python to track the results"],
+            "description_paragraph": {}
+        }
+    ]   ,
+    "skills": {
+      "languages": ["SexE", "Java", "Python", "C/C++", "SQL (Postgres)", "JavaScript", "HTML/CSS", "R"],
+      "frameworks": ["SexE Framework", "React", "Flask"],
+      "tools": ["Vscode", "Word"],
+      "libraries": ["numpy", "Boston Public Library"]
+    },
+    "obj_info": {
+      "user_id": {},
+      "date": {}
+    }
+}

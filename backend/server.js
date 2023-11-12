@@ -11,17 +11,11 @@ import { setDoc } from 'firebase/firestore/lite';
 import { deleteDoc } from 'firebase/firestore/lite';
 import { ref, uploadBytes } from 'firebase/storage';
 import OpenAI from 'openai';
-// import { fill_template_main } from './latex/fill_template.js';
-// import { compile_resume_main } from './latex/compile_resume.js';
 import fill_template from './latex/fill_template.js';
 import compile_resume from './latex/compile_resume.js';
 
-// import fill_template from './latex/fill_template.js';
-// import compile_resume from './latex/compile_resume.js';
 import dotenv from 'dotenv';
 dotenv.config();
-
-
 
 const app = express();
 
@@ -68,7 +62,7 @@ app.get("/getProfile", async(req,res) => {
 });
 
 
-app.get("/generate", async(req,res) => {
+app.post("/generate", async(req,res) => {
     const data = req.body;
     const uid = req.body.uid;
     // make request to firebase

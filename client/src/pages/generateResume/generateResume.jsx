@@ -14,10 +14,17 @@ function GenerateResume() {
 
     const generateNewResume = () => {
       console.log("Generating new resume");
-      //Send job description to backend for processing
-      axios.post('/generate', {
+      const data = {
         jobDescription: jobDescription,
         uid: uid
+      }
+      //Send job description to backend for processing
+      axios.post('http://localhost:3001/generate', data, {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(data),
+        method: 'POST',
       })
       .then(response => {
         console.log(response.data);

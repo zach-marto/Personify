@@ -3,6 +3,7 @@ import { signInWithPopup } from "firebase/auth"
 import { auth, googleProvider } from '../../firebase';
 import Cookies from 'universal-cookie';
 import { useNavigate } from "react-router-dom";
+import './login.css';
 
 function Login() {
 
@@ -24,7 +25,7 @@ function Login() {
   return (
     <div>
       <h2>Login with Google</h2>
-      <button onClick={handleGoogleSignIn}>Sign in with Google</button>
+      <button class='login-with-google-btn' onClick={handleGoogleSignIn}>Sign in with Google</button>
     </div>
   );
 };

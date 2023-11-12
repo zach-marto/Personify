@@ -1,3 +1,4 @@
+import React from 'react';
 import './App.css';
 import Login from './pages/login/login.jsx';
 import { BrowserRouter as Router, Route, Routes, Navigate } from 'react-router-dom';

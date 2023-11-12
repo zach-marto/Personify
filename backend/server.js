@@ -11,17 +11,19 @@ import { setDoc } from 'firebase/firestore/lite';
 import { deleteDoc } from 'firebase/firestore/lite';
 import { ref, uploadBytes } from 'firebase/storage';
 import OpenAI from 'openai';
+
 import fill_template from './latex/fill_template.js';
 import compile_resume from './latex/compile_resume.js';
-
 import dotenv from 'dotenv';
-dotenv.config();
 
+
+
+dotenv.config();
 const app = express();
+
 
 app.use(express.json());
 app.use(cors({origin: '*'}));
-
 
 app.post("/saveProfile", async(req,res) => {
     const data = req.body;
@@ -62,12 +64,11 @@ app.get("/getProfile", async(req,res) => {
 });
 
 
-app.post("/generate", async(req,res) => {
+app.get("/generate", async(req,res) => {
     const data = req.body;
     const uid = req.body.uid;
     // make request to firebase
     const docRef = doc(firebaseConfig.db, "users", uid) // docRef for userId as token
-    let profile;
 
     // data = profile retrieved from firebase (identify user by token)
     try{
@@ -77,62 +78,22 @@ app.post("/generate", async(req,res) => {
 
             let promptString = formatGptInput(resumeJson);
             let gptRawResponse = await getGptResponse(promptString);
-            // console.log(gptRawResponse.substring(0,8));
-            // let gptTrimmed = gptRawResponse.replace(/'```json\n|\n```'|\\n/g, '');
             let gptTrimmed = gptRawResponse.replace(/\n/g, '');
-            console.log(gptTrimmed);
             gptTrimmed = JSON.parse(gptTrimmed);
-            console.log(gptTrimmed);
-            // let gptExperiencesJson = {c: gptRawResponse};
-            // console.log(gptExperiencesJson)
-            
             // Match new bullets based on company
+            
             resumeJson.experienceInfo.forEach(e => {
                 let company = e.company_name;
-                for (var comp in gptTrimmed) {
-                    if (company == comp) {
-                        e.description_bullets = gptTrimmed.comp;
+                for (let comp in gptTrimmed) {
+                    if (company === comp) {
+                        e.description_bullets = gptTrimmed[comp];
                     }
                 }
-                // gptTrimmed.forEach(comp => {
-                //     if (company == comp) {
-                //         e.description_bullets = gptTrimmed.comp;
-                //     }
-                // });
             });
-            console.log(resumeJson)
-
-            resumeJson.experienceInfo.description_bullets = gptTrimmed;
-            //==================
-                // this is what we get from GPT response.
-
-                // Experience Section:
-
-                // [Google]
-                // - Spearheaded the design and implementation of scalable software solutions, ensuring the robustness and reliability of systems in a high-volume transaction environment.
-                // - Enhanced system efficiency by optimizing existing algorithms, resulting in a significant reduction in computational costs and improvement in runtime performance.
-                // - Collaborated effectively within a cross-functional team to integrate cutting-edge technologies, contributing to the continuous evolution and innovation of software products.
-                // - Instrumental in the deployment of machine learning models for predictive analytics, significantly increasing the accuracy of data-driven decision-making processes.
-
-                // Now we need to extract [Google] company name
-                // and each bulletpoints
-                // strip 'Expreience Secion:', '[]', etc
-
-                // then update resumeJson with matching company name
-            //==================
-
-            // projectsPromptString(formatGptInputProjects(resumeJson));
-            // gptRawProjectsResp = getGptResponse(projectsPromptString);
-            // gptRawProjectResp = gptRawProjectResp.substring(7, gptRawProjectResp.len - 3);
-
-            console.log(resumeJson);
-
-            // make API call to chatGPT with data as input
-
-            // rawResume = response received from chatGPT
+            
+            // console.log(resumeJson.experienceInfo[0].description_bullets);
 
             // convert rawResume to pdf & txt
-
             await fill_template.fill_template_main(JSON.stringify(resumeJson), uid);
             await compile_resume.compile_resume_main(uid);
 
@@ -148,7 +109,6 @@ app.post("/generate", async(req,res) => {
             uploadBytes(resumeRef, tex_file_path).then((snapshot) => {
                 console.log('Uploaded tex file!');
             });
-
 
             // get storage url and set to users/uid/resumeURLs section
 

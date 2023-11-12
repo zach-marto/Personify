@@ -2,6 +2,8 @@ import React from 'react'
 import { useState } from 'react'
 import uid from '../../cookieHandler';
 import axios from 'axios';
+import TextField from '@mui/material/TextField';
+import Button from '@mui/material/Button';
 
 function EditProfile() {
     const [contactInfo, setContactInfo] = useState({
@@ -120,44 +122,42 @@ function EditProfile() {
 
   
   return (
-    <div>
+  <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "1rem"}}>
       <h1>Edit Profile</h1>
       <section>
       <h2>Personal Information</h2>
-      <form>
-        <div>
-            <div>
-              <label>Name:</label>
-              <input
-                type="text"
-                name="name"
-                value={contactInfo.name}
-                onChange={handleContactChange}
-              />
-            </div>
-        </div>
-        <div>
-          <label>Phone:</label>
-          <input
-            type="text"
-            name="phone"
-            value={contactInfo.phone}
-            onChange={handleContactChange}
-          />
-        </div>
-        <div>
-          <label>Email:</label>
-          <input
-            type="text"
-            name="email"
-            value={contactInfo.email}
-            onChange={handleContactChange}
-            required
-          />
-        </div>
+      <form style={{ display: "flex", gap: "1rem" }}>
+              <div>
+                <label style={{marginRight: "1rem"}}>Name:</label>
+                <TextField 
+                  type="text"
+                  name="name"
+                  value={contactInfo.name}
+                  onChange={handleContactChange}
+                />
+              </div>
+              <div >
+                <label style={{marginRight: "1rem"}}>Phone:</label>
+                <TextField
+                  type="text"
+                  name="phone"
+                  value={contactInfo.phone}
+                  onChange={handleContactChange}
+                />
+              </div>
+              <div >
+                <label style={{marginRight: "1rem"}}>Email:</label>
+                <TextField
+                  type="text"
+                  name="email"
+                  value={contactInfo.email}
+                  onChange={handleContactChange}
+                  required
+                />
+              </div>
         <div>
           <label>LinkedIn:</label>
-          <input
+          <TextField
             type="text"
             name="linkedin"
             value={contactInfo.linkedin}
@@ -166,7 +166,7 @@ function EditProfile() {
         </div>
         <div>
           <label>GitHub:</label>
-          <input
+          <TextField
             type="text"
             name="github"
             value={contactInfo.github}
@@ -179,10 +179,10 @@ function EditProfile() {
   <section>
   <h2>Education</h2>
   {educationInfo.map((education, index) => (
-    <form key={index}>
+    <form style={{ display: "flex", gap: "1rem" }} key={index}>
       <div>
         <label>School Name:</label>
-        <input
+        <TextField
           type="text"
           name="school_name"
           value={education.school_name}
@@ -191,7 +191,7 @@ function EditProfile() {
       </div>
       <div>
         <label>Major:</label>
-        <input
+        <TextField
           type="text"
           name="major"
           value={education.major}
@@ -200,7 +200,7 @@ function EditProfile() {
       </div>
       <div>
         <label>School Location:</label>
-        <input
+        <TextField
           type="text"
           name="school_location"
           value={education.school_location}
@@ -209,7 +209,7 @@ function EditProfile() {
       </div>
       <div>
         <label>Graduation Date:</label>
-        <input
+        <TextField
           type="text"
           name="graduation_date"
           value={education.graduation_date}
@@ -218,7 +218,7 @@ function EditProfile() {
       </div>
       <div>
         <label>GPA:</label>
-        <input
+        <TextField
           type="text"
           name="GPA"
           value={education.GPA}
@@ -227,7 +227,7 @@ function EditProfile() {
       </div>
       <div>
         <label>Relevant Courses:</label>
-        <input
+        <TextField
           type="text"
           name="relevant_courses"
           value={education.relevant_courses}
@@ -236,17 +236,18 @@ function EditProfile() {
       </div>
     </form>
   ))}
-  <button onClick={addEducation}>Add Education</button>
-  <button onClick={removeEducation}>Remove Education</button>
+  <Button variant="outlined" onClick={addEducation}>Add Education</Button>
+  <Button variant="outlined" onClick={removeEducation}>Remove Education</Button>
 </section>
+
 
   <section>
   <h2>Experience</h2>
   {experienceInfo.map((experience, index) => (
-    <form key={index}>
+    <form style={{ display: "flex", gap: "1rem" }} key={index}>
       <div>
         <label>Company Name:</label>
-        <input
+        <TextField
           type="text"
           name="company_name"
           value={experience.company_name}
@@ -255,7 +256,7 @@ function EditProfile() {
       </div>
       <div>
         <label>Position Name:</label>
-        <input
+        <TextField
           type="text"
           name="position_name"
           value={experience.position_name}
@@ -264,7 +265,7 @@ function EditProfile() {
       </div>
       <div>
         <label>Start Date:</label>
-        <input
+        <TextField
           type="text"
           name="start_date"
           value={experience.start_date}
@@ -273,7 +274,7 @@ function EditProfile() {
       </div>
       <div>
         <label>End Date:</label>
-        <input
+        <TextField
           type="text"
           name="end_date"
           value={experience.end_date}
@@ -282,7 +283,7 @@ function EditProfile() {
       </div>
       <div>
         <label>Company Location:</label>
-        <input
+        <TextField
           type="text"
           name="company_location"
           value={experience.company_location}
@@ -291,26 +292,25 @@ function EditProfile() {
       </div>
       <div>
         <label>Description Paragraph:</label>
-        <input
+        <TextField
           type="text"
           name="description_paragraph"
           value={experience.description_paragraph}
           onChange={(e) => handleExperienceChange(e, index)}
         />
       </div>
-
     </form>
   ))}
-  <button onClick={addExperience}>Add Experience</button>
-  <button onClick={removeExperience}>Remove Experience</button>
+  <Button size='small' variant="outlined" onClick={addExperience} style={{fontSize: "0.8rem"}}>Add Experience</Button>
+  <Button size='small' variant="outlined" onClick={removeExperience} style={{fontSize: "0.8rem"}}>Remove Experience</Button>
 </section>
 
 <section>
 <h2>Skills</h2>
-  <form>
+  <form style={{ display: "flex", gap: "1rem" }}>
         <div>
           <label>Languages:</label>
-          <input
+          <TextField
             type="text"
             name="languages"
             value={skillsInfo.languages}
@@ -318,7 +318,7 @@ function EditProfile() {
         </div>
         <div>
           <label>Frameworks:</label>
-          <input
+          <TextField
             type="text"
             name="frameworks"
             value={skillsInfo.frameworks}
@@ -326,7 +326,7 @@ function EditProfile() {
         </div>
         <div>
           <label>Tools:</label>
-          <input
+          <TextField
             type="text"
             name="tools"
             value={skillsInfo.tools}
@@ -334,7 +334,7 @@ function EditProfile() {
         </div>
         <div>
           <label>Libraries:</label>
-          <input
+          <TextField
             type="text"
             name="libraries"
             value={skillsInfo.libraries}
@@ -343,7 +343,7 @@ function EditProfile() {
   </form>
 </section>
 
-    <button onClick={handleSubmit}>Submit</button>
+    <Button size='large' variant="contained" onClick={handleSubmit}>Submit</Button>
     </div>
   )
 }
